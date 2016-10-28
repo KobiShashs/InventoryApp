@@ -147,6 +147,12 @@ public class InventoryProvider extends ContentProvider{
         if (price != null && price < 0) {
             throw new IllegalArgumentException("Inventory requires valid price");
         }
+
+        // Check that the image is not null
+        byte[] image = values.getAsByteArray(InventoryEntry.COLUMN_INVENTORY_IMAGE);
+        if (image == null) {
+            throw new IllegalArgumentException("Product requires image to be set");
+        }
         // No need to check the breed, any value is valid (including null).
 
         // Get writeable database
@@ -219,6 +225,17 @@ public class InventoryProvider extends ContentProvider{
                 throw new IllegalArgumentException("Inventory requires valid price");
             }
         }
+
+        // If the {@link PetEntry#COLUMN_PET_WEIGHT} key is present,
+        // check that the weight value is valid.
+        if (values.containsKey(InventoryEntry.COLUMN_INVENTORY_IMAGE)) {
+            // Check that the weight is greater than or equal to 0 kg
+            Integer price = values.getAsInteger(InventoryEntry.COLUMN_INVENTORY_PRICE);
+            if (price != null && price < 0) {
+                throw new IllegalArgumentException("Inventory requires valid price");
+            }
+        }
+
 
         // No need to check the breed, any value is valid (including null).
 

@@ -48,15 +48,18 @@ public class InventoryCursorAdapter  extends CursorAdapter{
     public void bindView(View view, Context context, Cursor cursor) {
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
-        TextView summaryTextView = (TextView) view.findViewById(R.id.summary);
+        TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
+        TextView priceTextView = (TextView)view.findViewById(R.id.price);
 
         // Find the columns of pet attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_NAME);
         int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_QUANTITY);
+        int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_PRICE);
 
         // Read the pet attributes from the Cursor for the current pet
         String inventoryName = cursor.getString(nameColumnIndex);
         String inventoryQuantity = cursor.getString(quantityColumnIndex);
+        String inventoryPrice = cursor.getString(priceColumnIndex);
 
 //        // If the pet breed is empty string or null, then use some default text
 //        // that says "Unknown breed", so the TextView isn't blank.
@@ -66,7 +69,8 @@ public class InventoryCursorAdapter  extends CursorAdapter{
 
         // Update the TextViews with the attributes for the current pet
         nameTextView.setText(inventoryName);
-        summaryTextView.setText(inventoryQuantity);
+        quantityTextView.setText(inventoryQuantity);
+        priceTextView.setText(inventoryPrice);
     }
 
 }

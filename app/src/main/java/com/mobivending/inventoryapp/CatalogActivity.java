@@ -104,6 +104,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         values.put(InventoryEntry.COLUMN_INVENTORY_NAME, "Inventory 123");
         values.put(InventoryEntry.COLUMN_INVENTORY_QUANTITY, "17");
         values.put(InventoryEntry.COLUMN_INVENTORY_PRICE,"99");
+        values.put(InventoryEntry.COLUMN_INVENTORY_IMAGE,"ic_done");
 
 
         // Insert a new row for Toto into the provider using the ContentResolver.
@@ -151,7 +152,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         String[] projection = {
                 InventoryEntry._ID,
                 InventoryEntry.COLUMN_INVENTORY_NAME,
-                InventoryEntry.COLUMN_INVENTORY_QUANTITY };
+                InventoryEntry.COLUMN_INVENTORY_QUANTITY,
+                InventoryEntry.COLUMN_INVENTORY_PRICE};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
