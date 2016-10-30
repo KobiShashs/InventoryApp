@@ -17,13 +17,20 @@ package com.mobivending.inventoryapp;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mobivending.inventoryapp.data.InventoryContract.InventoryEntry;
+
+import static com.mobivending.inventoryapp.data.InventoryContract.InventoryEntry.COLUMN_INVENTORY_IMAGE;
+
 /**
  * Created by kobishasha on 10/25/16.
  * /**
@@ -50,17 +57,22 @@ public class InventoryCursorAdapter  extends CursorAdapter{
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
         TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
         TextView priceTextView = (TextView)view.findViewById(R.id.price);
+        ImageView imageImageView = (ImageView)view.findViewById(R.id.image);
 
         // Find the columns of pet attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_NAME);
         int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_QUANTITY);
         int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_PRICE);
+       // int blobColumnIndex = cursor.getColumnIndex((InventoryEntry.COLUMN_INVENTORY_IMAGE));
 
         // Read the pet attributes from the Cursor for the current pet
         String inventoryName = cursor.getString(nameColumnIndex);
         String inventoryQuantity = cursor.getString(quantityColumnIndex);
         String inventoryPrice = cursor.getString(priceColumnIndex);
 
+
+        byte[] imageBlob = cursor.getBlob(cursor.getColumnIndex(COLUMN_INVENTORY_IMAGE));
+        Drawable drawable =  new BitmapDrawable(context.getResources(), BitmapFactory.decodeByteArray(imageBlob, 0, imageBlob.length));
 //        // If the pet breed is empty string or null, then use some default text
 //        // that says "Unknown breed", so the TextView isn't blank.
 //        if (TextUtils.isEmpty(petBreed)) {
@@ -71,6 +83,7 @@ public class InventoryCursorAdapter  extends CursorAdapter{
         nameTextView.setText(inventoryName);
         quantityTextView.setText(inventoryQuantity);
         priceTextView.setText(inventoryPrice);
+        imageImageView.setImageDrawable(drawable);
     }
 
 }

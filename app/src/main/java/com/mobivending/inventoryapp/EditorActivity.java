@@ -27,6 +27,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -48,6 +49,8 @@ import com.mobivending.inventoryapp.data.InventoryContract.InventoryEntry;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+
+import static com.mobivending.inventoryapp.data.InventoryContract.InventoryEntry.COLUMN_INVENTORY_IMAGE;
 
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
     /** Identifier for the pet data loader */
@@ -165,6 +168,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
 
                     mImageView.setImageBitmap(bitmap);
+                   // mImageView.setImageDrawable();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -238,19 +242,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         else {
 
             // image = (ImageView)findViewById(R.id.imageSelected) ;
-            Bitmap bitmap = ((BitmapDrawable) mImageView.getDrawable()).getBitmap();
-            Bitmap imageBitMap = ((BitmapDrawable)image.getDrawable()).getBitmap();
-            byte[] imageByteArray;
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+           // Bitmap bitmap = ((BitmapDrawable) mImageView.getDrawable()).getBitmap();
 
-            if(bitmap!=null) {
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
-                 imageByteArray = bos.toByteArray();
+
             }
-            else
-            {
-                //imageByteArray = "";
-            }
+
             ContentValues values = new ContentValues();
             values.put(InventoryEntry.COLUMN_INVENTORY_NAME, nameString);
             //values.put(InventoryEntry.COLUMN_INVENTORY_QUANTITY, quantityString);
@@ -262,7 +258,19 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             if (!TextUtils.isEmpty(quantityString)) {
                 quantity = Integer.parseInt(quantityString);
             }
+
+
             values.put(InventoryEntry.COLUMN_INVENTORY_QUANTITY, quantity);
+
+
+        Bitmap imageBitMap = ((BitmapDrawable)image.getDrawable()).getBitmap();
+        byte[] imageByteArray;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+        imageBitMap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+        imageByteArray = bos.toByteArray();
+        values.put(InventoryEntry.COLUMN_INVENTORY_IMAGE,imageByteArray);
+
 
             // Determine if this is a new or existing pet by checking if mCurrentPetUri is null or not
             if (mCurrentPetUri == null) {
@@ -298,7 +306,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                             Toast.LENGTH_SHORT).show();
                 }
             }
-        }
+
 
 
 
@@ -496,14 +504,15 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_NAME);
             int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_QUANTITY);
             int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_PRICE);
-            int imageColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_IMAGE);
+            byte[] imageBlob = cursor.getBlob(cursor.getColumnIndex(COLUMN_INVENTORY_IMAGE));
+            Drawable drawable =  new BitmapDrawable(this.getResources(), BitmapFactory.decodeByteArray(imageBlob, 0, imageBlob.length));
 
 
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
             String quantity = cursor.getString(quantityColumnIndex);
             int price = cursor.getInt(priceColumnIndex);
-            byte[] image = cursor.getBlob(imageColumnIndex);
+            //byte[] image = cursor.getBlob(imageColumnIndex);
 
 
             // Update the views on the screen with the values from the database
@@ -515,8 +524,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 //            int id = getResources().getIdentifier("com.mobivending.inventoryapp:drawable/" + image, null, null);
      //       mImageView.setBackgroundResource(id);
 
-            Bitmap bitmap = BitmapFactory.decodeFile("com.mobivending.inventoryapp:drawable/" + image);
-            mImageView.setImageBitmap(bitmap);
+           // Bitmap bitmap = BitmapFactory.decodeFile("com.mobivending.inventoryapp:drawable/" + image);
+            mImageView.setImageDrawable(drawable);
 
 //            // Gender is a dropdown spinner, so map the constant value from the database
 //            // into one of the dropdown options (0 is Unknown, 1 is Male, 2 is Female).
@@ -541,7 +550,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mNameEditText.setText("");
         mQuantityEditText.setText("");
         mPriceEditText.setText("");
-        mImageView.setImageDrawable(null);
+       // mImageView.setImageDrawable(null);
        // mGenderSpinner.setSelection(0); // Select "Unknown" gender
     }
 

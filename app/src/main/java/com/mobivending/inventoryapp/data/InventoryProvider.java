@@ -10,8 +10,10 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.mobivending.inventoryapp.data.InventoryContract.InventoryEntry;
+
 /**
  * Created by kobishasha on 10/25/16.
+ * This is the provider
  */
 
 public class InventoryProvider extends ContentProvider{
@@ -19,10 +21,10 @@ public class InventoryProvider extends ContentProvider{
     /** Tag for the log messages */
     public static final String LOG_TAG = InventoryProvider.class.getSimpleName();
 
-    /** URI matcher code for the content URI for the pets table */
+    /** URI matcher code for the content URI for the inventory table */
     private static final int INVENTORYS = 100;
 
-    /** URI matcher code for the content URI for a single pet in the pets table */
+    /** URI matcher code for the content URI for a single pet in the inventory table */
     private static final int INVENTORY_ID = 101; /**
      * UriMatcher object to match a content URI to a corresponding code.
      * The input passed into the constructor represents the code to return for the root URI.
@@ -148,11 +150,12 @@ public class InventoryProvider extends ContentProvider{
             throw new IllegalArgumentException("Inventory requires valid price");
         }
 
-        // Check that the image is not null
-        byte[] image = values.getAsByteArray(InventoryEntry.COLUMN_INVENTORY_IMAGE);
-        if (image == null) {
-            throw new IllegalArgumentException("Product requires image to be set");
-        }
+//        // Check that the image is not null
+//        String image = values.getAsString(InventoryEntry.COLUMN_INVENTORY_IMAGE);
+//        if (image == null) {
+//            throw new IllegalArgumentException("Product requires image to be set");
+//
+//        }
         // No need to check the breed, any value is valid (including null).
 
         // Get writeable database
@@ -230,8 +233,9 @@ public class InventoryProvider extends ContentProvider{
         // check that the weight value is valid.
         if (values.containsKey(InventoryEntry.COLUMN_INVENTORY_IMAGE)) {
             // Check that the weight is greater than or equal to 0 kg
-            Integer price = values.getAsInteger(InventoryEntry.COLUMN_INVENTORY_PRICE);
-            if (price != null && price < 0) {
+            byte[] blob = values.getAsByteArray(InventoryEntry.COLUMN_INVENTORY_PRICE);
+          //  Byte image = values.getAsString(InventoryEntry.COLUMN_INVENTORY_PRICE);
+            if (blob != null ) {
                 throw new IllegalArgumentException("Inventory requires valid price");
             }
         }
