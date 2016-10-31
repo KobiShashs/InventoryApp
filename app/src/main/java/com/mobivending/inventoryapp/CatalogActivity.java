@@ -35,13 +35,18 @@ import android.widget.ListView;
 
 import com.mobivending.inventoryapp.data.InventoryContract.InventoryEntry;
 
-public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    /** Identifier for the inventory data loader */
+    /**
+     * Identifier for the inventory data loader
+     */
     private static final int INVENTORY_LOADER = 0;
 
-    /** Adapter for the ListView */
-    InventoryCursorAdapter mCursorAdapter;
+    /**
+     * Adapter for the ListView
+     */
+    private InventoryCursorAdapter mCursorAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +99,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         // Kick off the loader
         getLoaderManager().initLoader(INVENTORY_LOADER, null, this);
     }
+
     /**
      * Helper method to insert hardcoded pet data into the database. For debugging purposes only.
      */
@@ -103,8 +109,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         ContentValues values = new ContentValues();
         values.put(InventoryEntry.COLUMN_INVENTORY_NAME, "Inventory 123");
         values.put(InventoryEntry.COLUMN_INVENTORY_QUANTITY, "17");
-        values.put(InventoryEntry.COLUMN_INVENTORY_PRICE,"99");
-        values.put(InventoryEntry.COLUMN_INVENTORY_IMAGE,"8");
+        values.put(InventoryEntry.COLUMN_INVENTORY_PRICE, "99");
+        values.put(InventoryEntry.COLUMN_INVENTORY_IMAGE, "8");
 
 
         // Insert a new row for Toto into the provider using the ContentResolver.
@@ -113,6 +119,28 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         // Receive the new content URI that will allow us to access Toto's data in the future.
         Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
     }
+
+    public void updateQuntity(ContentValues v, String ID) {
+        String where = InventoryEntry._ID + "=" + ID;
+        String[] selectionArgs = {ID};
+
+        int go = getContentResolver().update(InventoryEntry.CONTENT_URI, v, where, selectionArgs);
+
+//        Uri newUri = getContentResolver().update(InventoryEntry.CONTENT_URI,v,v.getAsString(InventoryEntry._ID),null);
+//        ContentValues values = new ContentValues();
+//        values.put(InventoryEntry.COLUMN_INVENTORY_NAME, "Inventory 456");
+//        values.put(InventoryEntry.COLUMN_INVENTORY_QUANTITY, "17");
+//        values.put(InventoryEntry.COLUMN_INVENTORY_PRICE,"99");
+//        values.put(InventoryEntry.COLUMN_INVENTORY_IMAGE,"8");
+//
+//        // Insert a new row for Toto into the provider using the ContentResolver.
+//        // Use the {@link PetEntry#CONTENT_URI} to indicate that we want to insert
+//        // into the pets database table.
+//        // Receive the new content URI that will allow us to access Toto's data in the future.
+//        int newUri = getContentResolver().update(InventoryEntry.CONTENT_URI, values,InventoryEntry._ID,null);
+
+    }
+
 
     /**
      * Helper method to delete all pets in the database.

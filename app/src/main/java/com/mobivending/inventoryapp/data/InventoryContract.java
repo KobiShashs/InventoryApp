@@ -36,6 +36,7 @@ public final class InventoryContract {
     // To prevent someone from accidentally instantiating the contract class,
     // give it an empty constructor.
     private InventoryContract() {
+        throw new AssertionError("No InventoryContract instances for you!");
     }
 
     /**

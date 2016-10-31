@@ -25,7 +25,14 @@ public class InventoryProvider extends ContentProvider{
     private static final int INVENTORYS = 100;
 
     /** URI matcher code for the content URI for a single pet in the inventory table */
-    private static final int INVENTORY_ID = 101; /**
+    private static final int INVENTORY_ID = 101;
+
+
+
+    /**
+
+
+
      * UriMatcher object to match a content URI to a corresponding code.
      * The input passed into the constructor represents the code to return for the root URI.
      * It's common to use NO_MATCH as the input for this case.
@@ -98,6 +105,7 @@ public class InventoryProvider extends ContentProvider{
                 cursor = database.query(InventoryEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
+
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
@@ -190,6 +198,7 @@ public class InventoryProvider extends ContentProvider{
                 selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 return updateInventory(uri, contentValues, selection, selectionArgs);
+
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
         }

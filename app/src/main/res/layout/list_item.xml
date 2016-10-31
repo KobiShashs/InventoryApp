@@ -16,6 +16,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:descendantFocusability="blocksDescendants"
     android:padding="@dimen/activity_margin">
 
     <TextView
@@ -46,4 +47,10 @@
         android:id="@+id/image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <Button
+        android:text="@string/button_sale"
+        android:id="@+id/minus_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       />
 </LinearLayout>

@@ -68,15 +68,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private Button mImageButton;
     private ImageView mImageView;
 
-//    /** EditText field to enter the pet's gender */
-//    private Spinner mGenderSpinner;
-
-//    /**
-//     * Gender of the pet. The possible valid values are in the PetContract.java file:
-//     * {@link PetEntry#GENDER_UNKNOWN}, {@link PetEntry#GENDER_MALE}, or
-//     * {@link PetEntry#GENDER_FEMALE}.
-//     */
-//    private int mGender = InventoryEntry.GENDER_UNKNOWN;
     /** Boolean flag that keeps track of whether the pet has been edited (true) or not (false) */
     private boolean mInventoryHasChanged = false;
 
@@ -192,6 +183,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
 
     }
+
+
     public void orderButton(View v){
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:0123456789"));

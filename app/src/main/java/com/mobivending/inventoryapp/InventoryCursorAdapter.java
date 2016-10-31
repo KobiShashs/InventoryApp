@@ -23,12 +23,15 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mobivending.inventoryapp.data.InventoryContract.InventoryEntry;
 
+import static com.mobivending.inventoryapp.R.id.quantity;
 import static com.mobivending.inventoryapp.data.InventoryContract.InventoryEntry.COLUMN_INVENTORY_IMAGE;
 
 /**
@@ -41,9 +44,14 @@ import static com.mobivending.inventoryapp.data.InventoryContract.InventoryEntry
 
 
 public class InventoryCursorAdapter  extends CursorAdapter{
+
+    CatalogActivity cat = new CatalogActivity();
+    int quant;
+    private boolean flagClicked = false;
     public InventoryCursorAdapter(Context context, Cursor c) {
         super(context, c, 0 /* flags */);
     }
+
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
@@ -51,13 +59,44 @@ public class InventoryCursorAdapter  extends CursorAdapter{
         return LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
     }
 
+
+
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, final Cursor cursor) {
         // Find individual views that we want to modify in the list item layout
-        TextView nameTextView = (TextView) view.findViewById(R.id.name);
-        TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
-        TextView priceTextView = (TextView)view.findViewById(R.id.price);
-        ImageView imageImageView = (ImageView)view.findViewById(R.id.image);
+        final TextView nameTextView = (TextView) view.findViewById(R.id.name);
+        final TextView quantityTextView = (TextView) view.findViewById(quantity);
+        final TextView priceTextView = (TextView)view.findViewById(R.id.price);
+        final ImageView imageImageView = (ImageView)view.findViewById(R.id.image);
+        Button saleButton = (Button)view.findViewById(R.id.minus_button);
+//        quant = Integer.parseInt( quantityTextView.getText().toString());
+        saleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                    flagClicked=true;
+                    int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_QUANTITY);
+                    String inventoryQuantity = cursor.getString(quantityColumnIndex);
+                    quant = Integer.parseInt(inventoryQuantity);
+                    if(quant>0){
+                        quant--;
+                        Toast.makeText(context, "minus 1", Toast.LENGTH_SHORT).show();
+
+                        String calculated = String .valueOf(quant);
+                        quantityTextView.setText(calculated);//inventoryQuantity
+                        flagClicked=false;
+                    }
+                    else{
+                        Toast.makeText(context, "Sorry no can do", Toast.LENGTH_SHORT).show();
+                    }
+
+
+
+
+            }
+        });
+
+
 
         // Find the columns of pet attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_NAME);
@@ -81,9 +120,25 @@ public class InventoryCursorAdapter  extends CursorAdapter{
 
         // Update the TextViews with the attributes for the current pet
         nameTextView.setText(inventoryName);
-        quantityTextView.setText(inventoryQuantity);
+        if(flagClicked){
+            String calculated = String .valueOf(quant);
+            quantityTextView.setText(calculated);//inventoryQuantity
+            flagClicked=false;
+        }
+        else{
+            quantityTextView.setText(inventoryQuantity);//inventoryQuantity
+        }
+
         priceTextView.setText(inventoryPrice);
         imageImageView.setImageDrawable(drawable);
+        //quant=0;
     }
 
-}
+
+
+
+
+
+    }
+
+
