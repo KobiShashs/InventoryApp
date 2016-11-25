@@ -257,6 +257,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
 
         Bitmap imageBitMap = ((BitmapDrawable)image.getDrawable()).getBitmap();
+
         byte[] imageByteArray;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 

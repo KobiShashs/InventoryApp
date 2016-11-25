@@ -15,6 +15,8 @@
  */
 package com.mobivending.inventoryapp;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
@@ -43,11 +45,12 @@ import static com.mobivending.inventoryapp.data.InventoryContract.InventoryEntry
  */
 
 
-public class InventoryCursorAdapter  extends CursorAdapter{
+public class InventoryCursorAdapter extends CursorAdapter {
 
     CatalogActivity cat = new CatalogActivity();
     int quant;
     private boolean flagClicked = false;
+
     public InventoryCursorAdapter(Context context, Cursor c) {
         super(context, c, 0 /* flags */);
     }
@@ -60,49 +63,45 @@ public class InventoryCursorAdapter  extends CursorAdapter{
     }
 
 
-
     @Override
     public void bindView(View view, final Context context, final Cursor cursor) {
         // Find individual views that we want to modify in the list item layout
         final TextView nameTextView = (TextView) view.findViewById(R.id.name);
         final TextView quantityTextView = (TextView) view.findViewById(quantity);
-        final TextView priceTextView = (TextView)view.findViewById(R.id.price);
-        final ImageView imageImageView = (ImageView)view.findViewById(R.id.image);
-        Button saleButton = (Button)view.findViewById(R.id.minus_button);
+        final TextView priceTextView = (TextView) view.findViewById(R.id.price);
+        final ImageView imageImageView = (ImageView) view.findViewById(R.id.image);
+        Button saleButton = (Button) view.findViewById(R.id.minus_button);
 //        quant = Integer.parseInt( quantityTextView.getText().toString());
         saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                    flagClicked=true;
-                    int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_QUANTITY);
-                    String inventoryQuantity = cursor.getString(quantityColumnIndex);
-                    quant = Integer.parseInt(inventoryQuantity);
-                    if(quant>0){
-                        quant--;
-                        Toast.makeText(context, "minus 1", Toast.LENGTH_SHORT).show();
-
-                        String calculated = String .valueOf(quant);
-                        quantityTextView.setText(calculated);//inventoryQuantity
-                        flagClicked=false;
-                    }
-                    else{
-                        Toast.makeText(context, "Sorry no can do", Toast.LENGTH_SHORT).show();
-                    }
-
-
-
-
+                flagClicked = true;
+                int itemId = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryEntry._ID));
+                int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_QUANTITY);
+                String inventoryQuantity = cursor.getString(quantityColumnIndex);
+                quant = Integer.parseInt(inventoryQuantity);
+                if (quant > 0) {
+                    ContentValues values = new ContentValues();
+                    values.put(InventoryEntry.COLUMN_INVENTORY_QUANTITY, Integer.parseInt(inventoryQuantity) - 1);
+                    context.getContentResolver().update(ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, itemId), values, null, null);
+                    Toast.makeText(context, "minus 1", Toast.LENGTH_SHORT).show();
+                    String calculated = String.valueOf(quant);
+                    quantityTextView.setText(calculated);//inventoryQuantity
+                    flagClicked = false;
+                } else {
+                    Toast.makeText(context, "Sorry no can do", Toast.LENGTH_SHORT).show();
+                }
             }
+
+
         });
 
 
-
-        // Find the columns of pet attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_NAME);
         int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_QUANTITY);
         int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_PRICE);
-       // int blobColumnIndex = cursor.getColumnIndex((InventoryEntry.COLUMN_INVENTORY_IMAGE));
+        // int blobColumnIndex = cursor.getColumnIndex((InventoryEntry.COLUMN_INVENTORY_IMAGE));
 
         // Read the pet attributes from the Cursor for the current pet
         String inventoryName = cursor.getString(nameColumnIndex);
@@ -111,34 +110,23 @@ public class InventoryCursorAdapter  extends CursorAdapter{
 
 
         byte[] imageBlob = cursor.getBlob(cursor.getColumnIndex(COLUMN_INVENTORY_IMAGE));
-        Drawable drawable =  new BitmapDrawable(context.getResources(), BitmapFactory.decodeByteArray(imageBlob, 0, imageBlob.length));
-//        // If the pet breed is empty string or null, then use some default text
-//        // that says "Unknown breed", so the TextView isn't blank.
-//        if (TextUtils.isEmpty(petBreed)) {
-//            petBreed = context.getString(R.string.unknown_breed);
-//        }
+        Drawable drawable = new BitmapDrawable(context.getResources(), BitmapFactory.decodeByteArray(imageBlob, 0, imageBlob.length));
 
         // Update the TextViews with the attributes for the current pet
         nameTextView.setText(inventoryName);
-        if(flagClicked){
-            String calculated = String .valueOf(quant);
+        if (flagClicked) {
+            String calculated = String.valueOf(quant);
             quantityTextView.setText(calculated);//inventoryQuantity
-            flagClicked=false;
-        }
-        else{
+            flagClicked = false;
+        } else {
             quantityTextView.setText(inventoryQuantity);//inventoryQuantity
         }
 
         priceTextView.setText(inventoryPrice);
         imageImageView.setImageDrawable(drawable);
-        //quant=0;
     }
 
 
-
-
-
-
-    }
+}
 
 
