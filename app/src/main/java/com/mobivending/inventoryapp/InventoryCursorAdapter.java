@@ -65,13 +65,13 @@ public class InventoryCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, final Context context, final Cursor cursor) {
-        // Find individual views that we want to modify in the list item layout
+
         final TextView nameTextView = (TextView) view.findViewById(R.id.name);
         final TextView quantityTextView = (TextView) view.findViewById(quantity);
         final TextView priceTextView = (TextView) view.findViewById(R.id.price);
         final ImageView imageImageView = (ImageView) view.findViewById(R.id.image);
         Button saleButton = (Button) view.findViewById(R.id.minus_button);
-//        quant = Integer.parseInt( quantityTextView.getText().toString());
+
         saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,9 +101,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
         int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_NAME);
         int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_QUANTITY);
         int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_INVENTORY_PRICE);
-        // int blobColumnIndex = cursor.getColumnIndex((InventoryEntry.COLUMN_INVENTORY_IMAGE));
 
-        // Read the pet attributes from the Cursor for the current pet
         String inventoryName = cursor.getString(nameColumnIndex);
         String inventoryQuantity = cursor.getString(quantityColumnIndex);
         String inventoryPrice = cursor.getString(priceColumnIndex);
@@ -112,14 +110,13 @@ public class InventoryCursorAdapter extends CursorAdapter {
         byte[] imageBlob = cursor.getBlob(cursor.getColumnIndex(COLUMN_INVENTORY_IMAGE));
         Drawable drawable = new BitmapDrawable(context.getResources(), BitmapFactory.decodeByteArray(imageBlob, 0, imageBlob.length));
 
-        // Update the TextViews with the attributes for the current pet
         nameTextView.setText(inventoryName);
         if (flagClicked) {
             String calculated = String.valueOf(quant);
-            quantityTextView.setText(calculated);//inventoryQuantity
+            quantityTextView.setText(calculated);
             flagClicked = false;
         } else {
-            quantityTextView.setText(inventoryQuantity);//inventoryQuantity
+            quantityTextView.setText(inventoryQuantity);
         }
 
         priceTextView.setText(inventoryPrice);

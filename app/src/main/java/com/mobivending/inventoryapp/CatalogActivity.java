@@ -52,7 +52,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
 
-        // Setup FAB to open EditorActivity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,19 +103,12 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
      * Helper method to insert hardcoded pet data into the database. For debugging purposes only.
      */
     private void insertInventory() {
-        // Create a ContentValues object where column names are the keys,
-        // and Toto's pet attributes are the values.
         ContentValues values = new ContentValues();
         values.put(InventoryEntry.COLUMN_INVENTORY_NAME, "Inventory 123");
         values.put(InventoryEntry.COLUMN_INVENTORY_QUANTITY, "17");
         values.put(InventoryEntry.COLUMN_INVENTORY_PRICE, "99");
         values.put(InventoryEntry.COLUMN_INVENTORY_IMAGE, "8");
 
-
-        // Insert a new row for Toto into the provider using the ContentResolver.
-        // Use the {@link PetEntry#CONTENT_URI} to indicate that we want to insert
-        // into the pets database table.
-        // Receive the new content URI that will allow us to access Toto's data in the future.
         Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
     }
 
@@ -126,18 +118,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
         int go = getContentResolver().update(InventoryEntry.CONTENT_URI, v, where, selectionArgs);
 
-//        Uri newUri = getContentResolver().update(InventoryEntry.CONTENT_URI,v,v.getAsString(InventoryEntry._ID),null);
-//        ContentValues values = new ContentValues();
-//        values.put(InventoryEntry.COLUMN_INVENTORY_NAME, "Inventory 456");
-//        values.put(InventoryEntry.COLUMN_INVENTORY_QUANTITY, "17");
-//        values.put(InventoryEntry.COLUMN_INVENTORY_PRICE,"99");
-//        values.put(InventoryEntry.COLUMN_INVENTORY_IMAGE,"8");
-//
-//        // Insert a new row for Toto into the provider using the ContentResolver.
-//        // Use the {@link PetEntry#CONTENT_URI} to indicate that we want to insert
-//        // into the pets database table.
-//        // Receive the new content URI that will allow us to access Toto's data in the future.
-//        int newUri = getContentResolver().update(InventoryEntry.CONTENT_URI, values,InventoryEntry._ID,null);
 
     }
 
